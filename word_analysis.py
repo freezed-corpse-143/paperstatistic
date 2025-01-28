@@ -16,7 +16,8 @@ def string_update_word_frequencies(string, word_frequencies):
     
 
 def json_update_word_frequencies(file_path, word_frequencies):
-    file_data = json.load(open(file_path))
+    with open(file_path, encoding='utf-8') as f:
+        file_data = json.load(f)
     for key_1 in file_data.keys():
         item_1 = file_data[key_1]
 
@@ -64,10 +65,10 @@ def dir_update_word_frequencies(dir_path, stop_words_path="./stop_words_english.
 
     word_frequencies = filter_words_frequences(word_frequencies)
 
-    with open(stop_words_path) as f:
+    with open(stop_words_path, encoding='utf-8') as f:
         stop_words = f.read().split("\n")
     
-    with open(current_words_path) as f:
+    with open(current_words_path, encoding='utf-8') as f:
         current_words = f.read().split('\n')
 
     stop_words_count = 0
