@@ -27,11 +27,14 @@ def json_update_word_frequencies(file_path, word_frequencies):
             elif isinstance(subitem, list):
                 for item_2 in subitem:
                     string_update_word_frequencies(item_2, word_frequencies)
+            elif isinstance(subitem, dict):
+                for key_2 in subitem.keys():
+                    string_update_word_frequencies(subitem[key_2][0], word_frequencies)
 
 def filter_words_frequences(word_frequencies):
     skip_start_tokens = list(r"–#-&0123456789[]<:")
     skip_end_tokens = list(":;?")
-    skip_in_tokens = list(r"θ+˜$¨´,{}|×ł“”‘’—†‡•()∈♢♣@./=_®\\/")
+    skip_in_tokens = list(r"□θ+˜$¨´,{}|×ł“”‘’—†‡•()∈♢♣@./=_®\\/")
     # skip_in_tokens.extend(list("-abcdefg"))
     new_word_frequencies = defaultdict(int)
     for key in word_frequencies.keys():
