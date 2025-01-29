@@ -18,18 +18,9 @@ def string_update_word_frequencies(string, word_frequencies):
 def json_update_word_frequencies(file_path, word_frequencies):
     with open(file_path, encoding='utf-8') as f:
         file_data = json.load(f)
-    for key_1 in file_data.keys():
-        item_1 = file_data[key_1]
+    for value in file_data['data'].values():
+        string_update_word_frequencies(value, word_frequencies)
 
-        for subitem in item_1:
-            if isinstance(subitem, str):
-                string_update_word_frequencies(subitem, word_frequencies)
-            elif isinstance(subitem, list):
-                for item_2 in subitem:
-                    string_update_word_frequencies(item_2, word_frequencies)
-            elif isinstance(subitem, dict):
-                for key_2 in subitem.keys():
-                    string_update_word_frequencies(subitem[key_2][0], word_frequencies)
 
 def filter_words_frequences(word_frequencies):
     skip_start_tokens = list(r"–#-&0123456789[]<:")
