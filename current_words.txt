@@ -62,6 +62,7 @@ augments
 auto-encoder
 auto-encoding
 automatic
+automatically-extracted
 autoregressive
 auxiliary
 average
@@ -147,6 +148,7 @@ clustering
 co-attention
 co-occurred
 co-optimization
+coarse-to-fine
 coefficient
 coherent
 commonsense
@@ -173,6 +175,7 @@ concatenated
 concatenates
 concatenating
 concatenation
+concentrate
 concept-aware
 conceptual
 concurrent
@@ -211,6 +214,7 @@ convolutional
 convolutions
 coordinate
 coordinates
+corner
 corpora
 corpus
 corroborating
@@ -289,6 +293,7 @@ disk
 distill
 distillation
 distilling
+distinctive
 distributed
 distribution
 distributions
@@ -338,6 +343,7 @@ entropy
 epoch
 epochs
 equation
+equations
 equivalent
 error
 errors
@@ -433,6 +439,7 @@ generating
 generation
 generative
 generator
+global-alignment
 global-local
 gold
 golden
@@ -517,6 +524,7 @@ indicator
 indices
 indistinguishability
 induce
+induction
 inductive
 inference
 information-seeking
@@ -538,7 +546,9 @@ interact
 interaction
 interactions
 interactive
+interclass-relativity-adaptive
 intermediate
+internet-scale
 interpretability
 interpretable
 intersection
@@ -567,6 +577,7 @@ labels
 language-centric
 language-guided
 language-image
+language-visual
 large-scale
 late-interaction
 latency
@@ -599,6 +610,7 @@ localization
 localizing
 location
 log-likelihood
+long-range
 long-tail
 long-tailed
 lora
@@ -620,6 +632,7 @@ masks
 matrices
 matrix
 max
+max-margin
 max-pooling
 maximization
 maximize
@@ -632,6 +645,7 @@ message
 metric
 metrics
 micro-level
+mini-batch
 minimize
 minimized
 minimizes
@@ -646,6 +660,7 @@ modality
 modality-agnostic
 modality-balanced
 modality-specific
+modality-specific-to-holistic
 modular
 modulate
 modulated
@@ -664,6 +679,7 @@ multi-modal
 multi-modality
 multi-model
 multi-scale
+multi-step
 multi-task
 multi-view
 multidimensional
@@ -676,6 +692,7 @@ multimodal-query
 multiple
 multiple-choice
 multiple-phrase
+multiplicative
 multiview
 negative
 negatives
@@ -704,6 +721,7 @@ notation
 object-centric
 object-semantics
 objective
+off-the-shelf
 offline
 offset
 offsets
@@ -773,6 +791,7 @@ pre-dropouts
 pre-extracted
 pre-norm
 pre-process
+pre-processed
 pre-segmented
 pre-train
 pre-trained
@@ -797,6 +816,7 @@ pseudo-labels
 pseudo-relevance
 pseudo-relevant
 pseudo-selected
+quadruple
 qualitative
 quality
 quantization
@@ -898,6 +918,7 @@ seamlessly
 seconds
 segment
 segmentation
+segmented
 segments
 selective
 self-attention
@@ -948,6 +969,7 @@ skipping
 slice
 slicing
 small-batch
+smoothness
 snap
 snapshot
 snippets
@@ -973,6 +995,7 @@ stamps
 stand-alone
 state-of-the-art
 statement
+step-wise
 stochastic
 streaming
 streamlines
@@ -985,6 +1008,7 @@ subgroup
 subgroups
 submodule
 subscript
+subsection
 subset
 subsets
 subspace
@@ -1069,6 +1093,7 @@ time-consuming
 time-critical
 time-stamp
 timestamp
+to-be-learned
 to-be-learnt
 token
 token-based
@@ -1097,6 +1122,7 @@ transformers
 transforms
 transition
 transparent
+tree-augmented
 triangles
 trig-ensemble
 triplet
@@ -1137,6 +1163,7 @@ video-and-language
 video-audio
 video-based
 video-language
+video-related
 video-subtitle
 video-text
 video-to-text
@@ -1151,6 +1178,7 @@ visual-language
 visual-linguistic
 visual-retriever-reader
 visual-semantic
+visualizations
 visually-attended
 visually-grounded
 weakly-supervised

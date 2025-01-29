@@ -20,6 +20,7 @@ about
 above
 abroad
 absence
+absent
 absolute
 abst
 abstract
@@ -63,6 +64,7 @@ active
 actively
 activities
 activity
+activitynet
 actual
 actually
 adapt
@@ -269,6 +271,7 @@ api
 apoorv
 apparently
 appear
+appearance
 appeared
 appearing
 appears
@@ -314,6 +317,7 @@ arindam
 arise
 arisen
 arizona
+armand
 arni
 arnold
 around
@@ -343,8 +347,10 @@ assess
 assessment
 assign
 assigned
+assigning
 assigns
 assistants
+associate
 associated
 association
 assume
@@ -355,6 +361,7 @@ assumption
 at
 ata
 atcor
+atousa
 attached
 attained
 attains
@@ -362,6 +369,7 @@ attempt
 attempts
 attend
 attended
+attending
 attends
 attention
 attentional
@@ -411,6 +419,7 @@ bain
 baining
 balaji
 balanced
+balances
 baldini
 balloons
 baoquan
@@ -462,6 +471,7 @@ below
 ben
 bendy
 benefcial
+beneficial
 benefit
 benefiting
 beneft
@@ -556,6 +566,9 @@ c's
 c3d
 ca
 caae
+caba
+caiguanyu
+caili
 caiming
 cakir
 calculate
@@ -641,6 +654,7 @@ checks
 chen
 chen-lu
 chen-yu
+chen3
 chenchao
 cheng
 chenguang
@@ -777,6 +791,7 @@ competitor
 complete
 completely
 completing
+complexquery
 complicated
 composed
 composing
@@ -836,6 +851,7 @@ considering
 considers
 consistencybased
 constant
+constituent
 constitute
 construct
 constructed
@@ -847,6 +863,7 @@ consumers
 consumption
 consumptions
 contain
+contained
 containing
 contains
 content
@@ -915,6 +932,7 @@ cristian
 critical
 cropped
 cross
+cross-moda
 crossdomain
 crossgraph
 crossmedia
@@ -1015,6 +1033,8 @@ demonstrating
 demonstration
 den
 denil
+densely
+densenet-161
 department
 depend
 dependencies
@@ -1083,8 +1103,10 @@ differences
 different
 differs
 difficulty
+dig
 digging
 dijon
+dilated
 dimitri
 dimitris
 dingchenlu
@@ -1120,6 +1142,7 @@ divided
 divisions
 divvala
 dlyyang
+dmitriy
 do
 document
 documents
@@ -1132,6 +1155,7 @@ domain
 domain-specifc
 domains
 domainspecifc
+dominant
 dominate
 dominican
 dominikus
@@ -1170,6 +1194,7 @@ drops
 dsn
 du
 due
+dug
 dumps
 during
 durrett
@@ -1177,6 +1202,7 @@ dustin
 duy-kien
 dxr
 dylan
+dzmitry
 e
 e2evlp
 e5-2650
@@ -1220,6 +1246,7 @@ eighth
 eighty
 eiichro
 either
+ejf
 ekin
 el
 elaborately
@@ -1239,6 +1266,7 @@ elsewhere
 em
 embodied
 emerged
+emergence
 emerges
 emerging
 emission
@@ -1300,6 +1328,7 @@ entries
 entry
 equal
 equally
+equals
 equip
 equipment
 equipped
@@ -1332,6 +1361,7 @@ evan
 even
 evenly
 event
+events
 ever
 evermore
 every
@@ -1418,6 +1448,7 @@ extremely
 f
 f1
 fa-ting
+fabian
 fabio
 fabrizio
 face
@@ -1463,6 +1494,7 @@ feeding
 feeds
 fei
 fei-fei
+feiyu
 feld
 felix
 feng
@@ -1509,6 +1541,7 @@ fll
 flmr
 florian
 florida3
+flow
 flter
 fltered
 fnal
@@ -1568,6 +1601,7 @@ fourth
 fow
 fower
 fragmentlevel
+frames
 frameworks
 francisco
 frank
@@ -1628,6 +1662,7 @@ gao
 gap
 garderes
 gat
+gate
 gather
 gathering
 gating
@@ -1663,6 +1698,7 @@ giving
 glance
 glass3
 global
+global-alignmentbased
 globallocal
 glove
 go
@@ -1698,6 +1734,7 @@ greetings
 greg
 gretchen
 grey
+grovle
 grow
 growing
 grown
@@ -1710,12 +1747,14 @@ gt
 guang
 guangdong
 guansong
+guanyu
 guarantee
 gui
 guide
 guided
 guides
 guiding
+guiguang
 guihong
 guillaume
 guillem
@@ -1792,6 +1831,7 @@ heejae
 hehong
 hei
 height
+heilbron
 heinrich
 hello
 help
@@ -1818,6 +1858,7 @@ hi
 hid
 hieu
 high
+high-level
 higher
 higher-level
 highest
@@ -1855,6 +1896,7 @@ hongxia
 hope
 hopefully
 hopes
+horse
 hot
 houdong
 hours
@@ -1865,6 +1907,7 @@ howbeit
 however
 howto100m
 hrituraj
+hrm
 hsr
 ht100m
 htehree
@@ -1990,6 +2033,7 @@ included
 includes
 including
 incomplete
+inconsequential
 incorporate
 incorporated
 incorporates
@@ -2096,6 +2140,7 @@ intérieur
 invades
 invention
 invents
+inverse
 investigate
 investigated
 investigating
@@ -2139,10 +2184,12 @@ jack
 jacob
 jae
 jaemin
+jaime
 jair
 jakob
 james
 jamie
+jan
 jang
 janne
 january
@@ -2151,12 +2198,14 @@ jason
 jatin
 jean
 jean-baptiste
+jeanbaptiste
 jeff
 jeffrey
 jenia
 jennimaria
 jesse
 jessica
+ji
 ji-rong
 jia
 jiabo
@@ -2206,6 +2255,7 @@ jiongnan
 jiquan
 jitao
 jitendra
+jiwei
 jiyang
 jizhou
 joan
@@ -2239,6 +2289,7 @@ junaid
 junchi
 june
 junfeng
+jungong
 junhao
 junjie
 junjun
@@ -2283,6 +2334,7 @@ kbs
 kc
 kcs
 ke
+kecheng
 keep
 keeps
 keith
@@ -2379,6 +2431,7 @@ later
 latest
 latter
 latterly
+laurens
 laurent
 law
 lawrence
@@ -2498,6 +2551,7 @@ lou
 louis
 low
 lower
+lsmdc
 lstm
 ltd
 lu
@@ -2545,6 +2599,7 @@ manohar
 manoj
 manual
 manuel
+manuscript
 many
 map
 mapped
@@ -2617,6 +2672,7 @@ melanie
 mellon
 memory
 meng
+mengdan
 mention
 mentioned
 mentions
@@ -2648,6 +2704,7 @@ ming
 ming-wei
 minghao
 mini-net
+minibatch
 mining
 miningyoutube
 minnetonka
@@ -2676,9 +2733,11 @@ mmbt
 mmca
 mmf
 mmrg
+mmt
 mnre
 mod
 modality-specifc
+modality-word
 modalityspecifc
 mode
 model
@@ -2690,6 +2749,7 @@ moderately
 moderation
 modifcations
 modifed
+modified
 module
 module7
 modules
@@ -2707,7 +2767,9 @@ moreover
 most
 mostafa
 mostly
+motion
 motivated
+motivation
 motivations
 motor
 move
@@ -2724,6 +2786,7 @@ ms
 ms-coco
 msa
 msr-vtt
+msts
 mubarak
 much
 mug
@@ -2904,6 +2967,7 @@ obtains
 obviously
 occlusions
 occupy
+occur
 occurrence
 ocean
 ocr
@@ -2964,6 +3028,7 @@ optimize
 optimized
 optimizer
 optimizing
+optimum
 option
 optional
 options
@@ -2993,6 +3058,7 @@ outcomes
 outer
 outlined
 outperform
+outperformed
 outperforms
 output
 outputs
@@ -3003,6 +3069,7 @@ overall
 overcome
 overcomes
 overftting
+overlaid
 overlook
 overlooked
 overly
@@ -3015,6 +3082,7 @@ packaged
 packages
 page
 pages
+pai
 paid
 painting
 pair
@@ -3058,6 +3126,7 @@ peijin
 peng
 pengcheng
 pengchuan
+penghao
 pengjun
 people
 per
@@ -3091,6 +3160,7 @@ pick
 picking
 picture
 pictures
+piece
 pieces
 pietro
 ping
@@ -3217,6 +3287,7 @@ professor
 proffers
 program
 progress
+progressively
 project
 projected
 projecting
@@ -3437,6 +3508,7 @@ relevant
 relies
 relja
 relocate
+relu
 rely
 relying
 remove
@@ -3507,6 +3579,7 @@ retro
 return
 returned
 returns
+reuben
 reuse
 reveal
 revealed
@@ -3536,6 +3609,7 @@ riheng
 rinon
 rise
 risks
+rnchen2
 roaming
 rob
 robert
@@ -3575,10 +3649,12 @@ ruiyang
 ruize
 run
 runhui
+runnan
 running
 runs
 ruochen
 ruslan
+russ
 ryan
 s
 s3d
@@ -3640,6 +3716,7 @@ sco
 score
 scores
 scott
+script
 seamless
 search
 searched
@@ -3680,6 +3757,7 @@ seminal
 semisupervised
 sempcyc
 sen
+senet-154
 sense
 sensible
 sensitively
@@ -3727,6 +3805,7 @@ shaoxiang
 shape
 sharan
 shashank
+shawn
 shayne
 she
 she'd
@@ -3860,6 +3939,7 @@ sound
 source
 sourced
 sources
+sourish
 spain
 spatial
 spatialtemporal
@@ -3888,11 +3968,13 @@ sports
 spots
 spreading
 springer
+squeeze-andexcitation
 srini
 stacked
 stan
 stand
 standard
+standing
 stands
 stanislaw
 start
@@ -4107,6 +4189,7 @@ testing
 text
 text-
 text-kvqa
+text-tovideo
 texts
 textto-video
 th
@@ -4161,6 +4244,7 @@ thing
 things
 think
 third
+thirtieth
 thirty
 thirtysecond
 this
@@ -4204,6 +4288,7 @@ ting
 tip
 title
 titles
+tmp
 to
 todor
 together
@@ -4244,18 +4329,21 @@ trained
 training
 trainingset
 trains
+transcriptions
 transformed
 transformer-encoding
 transformerbased
 translate
 translation
 translator
+trapped
 travel
 treat
 treated
 treating
 treats
 trecvid
+trees
 tremendous
 trend
 trendy
@@ -4324,6 +4412,7 @@ unfortunately
 uni-modal
 unicodervl
 unifed
+unified
 uniform
 uniformly
 unify
@@ -4414,6 +4503,7 @@ verbalization
 verbalize
 verbalizes
 verbalizing
+verbs
 verga
 verifed
 verified
@@ -4424,13 +4514,16 @@ versus
 very
 veselin
 vgg
+vggish
 via
+vice
 victor
 vicuna
 vicuna-13b
 video
 video-totext
 videos
+videotext
 view
 viewed
 views
@@ -4491,8 +4584,10 @@ vrr-img
 vs
 vsrn
 w
+w2v
 wade
 wang
+wang1
 want
 wants
 warm-up
@@ -4559,6 +4654,7 @@ went
 wentau
 wenwu
 wenyue
+wenzhe
 wenzheng
 were
 weren't
@@ -4675,6 +4771,7 @@ xiaolei
 xiaolong
 xiaoou
 xiaopeng
+xiaoshan
 xiaowei
 xiaoxiao
 xiaoxun
@@ -4703,16 +4800,19 @@ xiyang
 xiyue
 xizhou
 xlm-roberta
+xlnet
 xtra
 xtra-10c
 xu
 xuanjing
 xuanteng
+xudong
 xuedong
 xuemeng
 xuezhi
 xufeng
 xuming
+xun
 xuwu
 xuxinshun
 y
@@ -4725,6 +4825,7 @@ yang
 yang1
 yanghua
 yankai
+yanli
 yanming
 yann
 yannis
@@ -4769,6 +4870,7 @@ yipin
 yiqing
 yiqun
 yitian
+yixin
 yizhi
 yizhong
 yoav
@@ -4777,6 +4879,7 @@ yong
 yongdong
 yongfei
 yonghao
+yonghui
 yongliang
 yongqin
 yoohoon
@@ -4848,11 +4951,13 @@ zequn
 zero
 zeromean
 zeroshot
+zerun
 zexuan
 zeynep
 zeyuan
 zhan
 zhang
+zhang2
 zhanghao
 zhanyuweilif
 zhaoheng
@@ -4876,6 +4981,8 @@ zhifeng
 zhihao
 zhijie
 zhiliang
+zhilin
+zhimin
 zhiruo
 zhitao
 zhiwang
@@ -4885,7 +4992,9 @@ zhiyuan
 zhong
 zhongqiang
 zhou
+zhou2
 zhu
+zhuang
 zhuo
 zhuohan
 zhuowen
@@ -4895,6 +5004,7 @@ zican
 zicheng
 zihang
 zihao
+zijia
 zineng
 ziqi
 zirui
