@@ -31,7 +31,7 @@ def json_update_word_frequencies(file_path, word_frequencies):
 def filter_words_frequences(word_frequencies):
     skip_start_tokens = list(r"–#-&0123456789[]<:")
     skip_end_tokens = list(":;?")
-    skip_in_tokens = list(r"+˜$¨´,{}|×ł“”‘’—†‡•()∈♢♣@./=_®\\/")
+    skip_in_tokens = list(r"θ+˜$¨´,{}|×ł“”‘’—†‡•()∈♢♣@./=_®\\/")
     # skip_in_tokens.extend(list("-abcdefg"))
     new_word_frequencies = defaultdict(int)
     for key in word_frequencies.keys():
