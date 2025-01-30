@@ -10,7 +10,7 @@ client = OpenAI(
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"
     )
 
-prompt = '''Please modify the structure of each dictionary in the provided list according to the following requirements:
+reshape_prompt = '''Please modify the structure of each dictionary in the provided list according to the following requirements:
 1. Ensure that the top-level nodes only include the following:
     - Title
     - Abstract
@@ -26,7 +26,7 @@ prompt = '''Please modify the structure of each dictionary in the provided list 
     - image
     - table
 2. Move any other content into the appropriate top-level node as a sub-node.
-3. Output the modified structure in a code block for clarity.
+3. Output the modified structure in a code block for clarity, which is in the format of "```json\n{output}```".
 '''
 
 os.makedirs("./structures", exist_ok=True)
@@ -44,29 +44,15 @@ def check_json_structures(json_dir):
 
     review_structures(structures)
 
-def extract_from_code_block(str):
-    match = re.search(r'```(.*?)```', str, re.DOTALL)
-    if match:
-        extracted_text = match.group(1)
-        start_index = -1
-        for char in ['{', '[']:
-            index = extracted_text.find(char)
-            if index != -1 and (start_index == -1 or index < start_index):
-                start_index = index
-        
-        if start_index != -1:
-            extracted_text = extracted_text[start_index:]
-            return extracted_text.strip()
-        else:
-            raise ValueError("{ or [ not found")
+def extract_from_code_block(text):
+    matches = re.findall(r'```(.*?)```', text, re.DOTALL)
+    if matches:
+        return [match.strip() for match in matches]
     else:
-        print("don't find match")
-        raise ValueError("don't find match")
+        print("No code blocks found")
+        return []
 
 def process_item(client, prompt, item, idx):
-    """
-    处理单个json数据项，返回解析后的JSON结果。
-    """
     completion = client.chat.completions.create(
         model="qwen-plus",
         messages=[
@@ -79,25 +65,25 @@ def process_item(client, prompt, item, idx):
 
     result = completion.choices[0].message.content
 
-    json_str = extract_from_code_block(result)
+    json_str = extract_from_code_block(result)[0][len("json\n"):]
 
     try:
         return json.loads(json_str), idx
     except json.JSONDecodeError as e:
-        print(f"解码JSON时发生错误: {e}")
+        print(f"decode error: {e}")
         with open("./temp/error.txt", 'w', encoding="utf-8") as f:
             f.write(json_str)
         raise e
 
 
 def review_structures(json_data):
-    global client, prompt
+    global client, reshape_prompt
     
     results = []
     
-    # 使用ThreadPoolExecutor来创建线程池
+
     with ThreadPoolExecutor(max_workers=4) as executor:
-        futures = {executor.submit(process_item, client, prompt, item,idx): item for idx, item in enumerate(json_data)}
+        futures = {executor.submit(process_item, client, reshape_prompt, item,idx): item for idx, item in enumerate(json_data)}
         
         for future in as_completed(futures):
             try:
@@ -105,12 +91,11 @@ def review_structures(json_data):
                 if data is not None:
                     results.append((data, idx))
             except Exception as exc:
-                print(f'生成回复出错: {exc}')
+                print(f'generate error: {exc}')
     
     results.sort(key=lambda x: x[1])
     sorted_results = [item[0] for item in results]
 
-    # 保存最终结果到文件
     with open("./structures/new_structures.json", 'w', encoding='utf-8') as f:
         json.dump(sorted_results, f, indent=4)
 
@@ -135,21 +120,17 @@ def main():
     args = parser.parse_args()
 
     if args.command == 'review':
-        # 检查json_dir是否存在
         if not os.path.exists(args.json_dir):
             print(f"Error: Directory '{args.json_dir}' does not exist.")
             return
         
-        # 执行check_json_structures函数
         check_json_structures(args.json_dir)
 
     elif args.command == 'rewrite':
-        # 检查json_dir是否存在
         if not os.path.exists(args.json_dir):
             print(f"Error: Directory '{args.json_dir}' does not exist.")
             return
-        
-        # 执行rewrite_structure函数
+
         rewrite_structures(args.json_dir)
         print("Rewrite completed. JSON files in the directory have been updated.")
 
