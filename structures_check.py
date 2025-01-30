@@ -29,7 +29,28 @@ reshape_prompt = '''Please modify the structure of each dictionary in the provid
 3. Output the modified structure in a code block for clarity, which is in the format of "```json\n{output}```".
 '''
 
+reformat_json_prompt = '''Please convert invalid input json to valid json.
+The output should be presented within a code block in the following format: "json\n<output>", where "<output>" is the placeholder for the output.
+'''
+
 os.makedirs("./structures", exist_ok=True)
+
+
+def reformat_json(text):
+    global reformat_json_prompt
+    completion = client.chat.completions.create(
+            model="qwen-plus",
+            messages=[
+                {'role': 'system', 'content': reformat_json_prompt},
+                {'role': 'user', 'content': f'```input json\n{text}```'}
+            ],
+            stream=False,
+            temperature=0.0
+        )
+    
+    result = completion.choices[0].message.content
+    new_result = extract_from_code_block(result)[0].strip("json").strip("<").strip(">")
+    return json.loads(new_result)
 
 def check_json_structures(json_dir):
     structures = []
@@ -73,7 +94,7 @@ def process_item(client, prompt, item, idx):
         print(f"decode error: {e}")
         with open("./temp/error.txt", 'w', encoding="utf-8") as f:
             f.write(json_str)
-        raise e
+        return reformat_json(json_str)
 
 
 def review_structures(json_data):
