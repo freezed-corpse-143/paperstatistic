@@ -2,20 +2,19 @@ import os
 import re
 import json
 import argparse
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from openai import OpenAI
+client = OpenAI(api_key= os.environ['BAILIAN_API_KEY'] , base_url="https://dashscope.aliyuncs.com/compatible-mode/v1")
 
-os.makedirs("./extract_info", exist_ok=True)
+os.makedirs("./extract_infomation", exist_ok=True)
 
 reformat_json_prompt = '''Please convert invalid input json to valid json.
 The output should be presented within a code block in the following format: "json\n<output>", where "<output>" is the placeholder for the output.
 '''
 
-extract_experiment_prompt = '''Please read the input text and the past experiment information provided below, and follow these instructions:
-1. Extract the experiment types (e.g., ablation studies, hyperparameter tuning, etc.), baselines, benchmarks, and metrics from the input text, and integrate them into the past experiment information.
+extract_experiment_prompt = '''Please read the input text and follow these instructions:
+1. Extract the experiment types (e.g., ablation studies, hyperparameter tuning, etc.), baselines, benchmarks, and metrics from the input text.
 2. The output should be presented within a code block in the following format: "json\n<output>", where "<output>" is the placeholder for the output.
-
-```previous experiment infomation
-{previous_experiment_information}
-```
 '''
 
 def extract_from_code_block(text):
@@ -81,7 +80,7 @@ def read_structure_data(json_path):
     return new_json_data
 
 def reformat_json(text):
-    global reformat_json_prompt
+    global reformat_json_prompt, client
     completion = client.chat.completions.create(
             model="qwen-plus",
             messages=[
@@ -96,55 +95,70 @@ def reformat_json(text):
     new_result = extract_from_code_block(result)[0].strip("json").strip("<").strip(">")
     return json.loads(new_result)
 
-def batch_extract_experiment_infomation(json_dir):
+def extract_experiment_info(input_text):
     global extract_experiment_prompt, client
+    completion = client.chat.completions.create(
+        model="qwen-plus",
+        messages=[
+            {'role': 'system', 'content': extract_experiment_prompt},
+            {'role': 'user', 'content': f'input text\n{input_text}'}
+        ],
+        stream=False,
+        temperature=0.0
+    )
+    result = completion.choices[0].message.content
+    new_experiment_infomation = extract_from_code_block(result)
+    if len(new_experiment_infomation) > 0:
+        new_experiment_infomation = new_experiment_infomation[0].strip("json").strip("<").strip(">")
+        try:
+            new_experiment_json = json.loads(new_experiment_infomation)
+        except Exception as e:
+            print(f"Exception :{e}", new_experiment_infomation)
+            with open("./temp/error.txt", 'w', encoding='utf-8') as f:
+                f.write(new_experiment_infomation)
+            new_experiment_json = reformat_json(new_experiment_infomation)
+        return new_experiment_json
+    return {}
+
+def merge_experiment_info(experiment_list):
+    merged_experiment = {
+        "experiment_types": set(),
+        "baselines": set(),
+        "benchmarks": set(),
+        "metrics": set(),
+    }
+    for experiment in experiment_list:
+        for key in merged_experiment.keys():
+            if key in experiment:
+                merged_experiment[key].update(experiment[key])
+    
+    # 将集合转换回列表
+    for key in merged_experiment:
+        merged_experiment[key] = list(merged_experiment[key])
+    
+    return merged_experiment
+
+def batch_extract_experiment_infomation(json_dir):
     experiment_data_list = []
     for file_name in os.listdir(json_dir):
         file_path = os.path.join(json_dir, file_name)
         json_data = read_structure_data(file_path)
         if "experiment" in json_data.keys():
-            experiment_data_list.append(
-                json_data['experiment']
-            )
-    if os.path.exists("./extract_info/experiment.json"):
-        with open("./extract_info/experiment.json", encoding='utf-8') as f:
-            previous_experiment_infomation = json.load(f)
-    else:
-        previous_experiment_infomation = {
-            "experiment_types": [],
-            "baselines": [],
-            "benchmarks": [],
-            "metrics": [],
-        }
-    
-    for input_text in experiment_data_list:
-        completion = client.chat.completions.create(
-            model="qwen-plus",
-            messages=[
-                {'role': 'system', 'content': extract_experiment_prompt.format(
-                    previous_experiment_information=json.dumps(previous_experiment_infomation)
-                )},
-                {'role': 'user', 'content': f'```input text\n{input_text}```'}
-            ],
-            stream=False,
-            temperature=0.0
-        )
-        result = completion.choices[0].message.content
-        new_experiment_infomation = extract_from_code_block(result)
-        if len(new_experiment_infomation) > 0:
-            new_experiment_infomation = new_experiment_infomation[0].strip("json").strip("<").strip(">")
+            experiment_data_list.append(json_data['experiment'])
 
-            try:
-                new_experiment_json = json.loads(new_experiment_infomation)
-            except Exception as e:
-                print(f"Exception :{e}", new_experiment_infomation)
-                with open("./temp/error.txt", 'w', encoding='utf-8') as f:
-                    f.write(new_experiment_infomation)
-                new_experiment_json = reformat_json(new_experiment_infomation)
-            previous_experiment_infomation = new_experiment_json
-    
-    with open("./extract_info/experiment.json", 'w', encoding='utf-8') as f:
-            json.dump(previous_experiment_infomation, f, indent = 4)
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        futures = [executor.submit(extract_experiment_info, input_text) for input_text in experiment_data_list]
+        experiment_results = [future.result() for future in as_completed(futures)]
+
+    merged_experiment = merge_experiment_info(experiment_results)
+
+    if os.path.exists("./extract_infomation/experiment.json"):
+        with open("./extract_infomation/experiment.json", encoding='utf-8') as f:
+            previous_experiment_infomation = json.load(f)
+        merged_experiment = merge_experiment_info([previous_experiment_infomation, merged_experiment])
+
+    with open("./extract_infomation/experiment.json", 'w', encoding='utf-8') as f:
+        json.dump(merged_experiment, f, indent=4)
 
 def main():
     parser = argparse.ArgumentParser(description="extract experiment information from JSON files in a directory.")
