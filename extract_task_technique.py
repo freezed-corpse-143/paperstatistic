@@ -183,7 +183,7 @@ def merge_technique_info(technique_list):
             merged_techniques[name] = {
                 "name": name,
                 "description": list(set(technique['description'])),
-                "advantages": list(set(technique["challenges"])),
+                "advantages": list(set(technique["advantages"])),
                 "disadvantages": list(set(technique["disadvantages"])),
                 "project_url": list(set(technique['project_url']))
             }
