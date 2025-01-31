@@ -14,7 +14,7 @@ The output should be presented within a code block in the following format: "jso
 
 extract_task_technique_prompt = '''Please read the input text and follow these instructions:
 1. Extract the task name, description, challenges and latent techniques of solution from the input text into the first code block.
-2. Extract the techique name, description, advantages, disadvantages, targeted task  and project url from the input text into the second code block.
+2. Extract the techique name, description, advantages, disadvantages, targeted tasks and project urls from the input text into the second code block.
 3. The output should be presented within a code block in the following format: "json\n<output>", where "<output>" is the placeholder for the output.
 
 Output examples are as follows:
@@ -34,8 +34,8 @@ Output examples are as follows:
     "description": [],
     "advantages": [],
     "disadvantages": [],
-    "targeted_task": [],
-    "project_url": []
+    "targeted_tasks": [],
+    "project_urls": []
 }
 ```
 '''
@@ -178,7 +178,7 @@ def merge_technique_info(technique_list):
         name = technique["name"]
 
         if name in merged_techniques:
-            for attribute_name in ["description", "advantages", "disadvantages", "targeted_task", "project_url"]:
+            for attribute_name in ["description", "advantages", "disadvantages", "targeted_tasks", "project_urls"]:
                 merged_techniques[name][attribute_name] = list(set(merged_techniques[name][attribute_name]+technique[attribute_name]))
         else:
             merged_techniques[name] = {
@@ -186,8 +186,8 @@ def merge_technique_info(technique_list):
                 "description": list(set(technique['description'])),
                 "advantages": list(set(technique["advantages"])),
                 "disadvantages": list(set(technique["disadvantages"])),
-                "targeted_task": list(set(technique["targeted_task"])),
-                "project_url": list(set(technique['project_url']))
+                "targeted_tasks": list(set(technique["targeted_tasks"])),
+                "project_urls": list(set(technique['project_urls']))
             }
 
     return list(merged_techniques.values())
