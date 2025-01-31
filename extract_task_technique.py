@@ -4,6 +4,7 @@ import json
 import argparse
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from openai import OpenAI
+from tqdm import tqdm
 client = OpenAI(api_key= os.environ['BAILIAN_API_KEY'] , base_url="https://dashscope.aliyuncs.com/compatible-mode/v1")
 
 os.makedirs("./extract_infomation", exist_ok=True)
@@ -209,7 +210,7 @@ def batch_extract_task_technique_infomation(json_dir):
     technique_results =[]
     with ThreadPoolExecutor(max_workers=4) as executor:
         futures = [executor.submit(extract_task_technique, input_text) for input_text in task_technique_list]
-        for future in as_completed(futures):
+        for future in tqdm(as_completed(futures), total=len(futures), desc="Processing"):
             task, technique = future.result()
             task_results.append(task)
             technique_results.append(technique)
@@ -236,7 +237,7 @@ def batch_extract_task_technique_infomation(json_dir):
         json.dump(merged_technique, f, indent=4)
 
 def main():
-    parser = argparse.ArgumentParser(description="extract experiment information from JSON files in a directory.")
+    parser = argparse.ArgumentParser(description="extract task and technique information from JSON files in a directory.")
     parser.add_argument("json_dir", type=str, help="Directory containing JSON files")
     args = parser.parse_args()
 
