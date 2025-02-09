@@ -1,5 +1,4 @@
 import os
-import re
 import json
 from concurrent.futures import ThreadPoolExecutor
 from collections import defaultdict

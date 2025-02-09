@@ -1,8 +1,6 @@
 import os
 import json
-from openai import OpenAI
 from concurrent.futures import ThreadPoolExecutor, as_completed
-import re
 import argparse
 from util import client, extract_json_from_str
 
@@ -23,10 +21,6 @@ reshape_prompt = '''Please modify the structure of each dictionary in the provid
     - Table
 2. Move any other content into the appropriate top-level node as a sub-node.
 3. Output the modified structure in a code block for clarity, which is in the format of "```json\n{output}```".
-'''
-
-reformat_json_prompt = '''Please convert invalid input json to valid json.
-The output should be presented within a code block in the following format: "json\n<output>", where "<output>" is the placeholder for the output.
 '''
 
 os.makedirs("./structures", exist_ok=True)
@@ -67,8 +61,6 @@ def review_structures(json_data):
     global client, reshape_prompt
     
     results = []
-    
-
     with ThreadPoolExecutor(max_workers=4) as executor:
         futures = {executor.submit(process_item, client, reshape_prompt, item,idx): item for idx, item in enumerate(json_data)}
         

@@ -3,15 +3,10 @@ import re
 import json
 import argparse
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from openai import OpenAI
 from tqdm import tqdm
-client = OpenAI(api_key= os.environ['BAILIAN_API_KEY'] , base_url="https://dashscope.aliyuncs.com/compatible-mode/v1")
+from util import client, extract_from_code_block, extract_json_from_str
 
 os.makedirs("./extract_infomation", exist_ok=True)
-
-reformat_json_prompt = '''Please convert invalid input json to valid json.
-The output should be presented within a code block in the following format: "json\n<output>", where "<output>" is the placeholder for the output.
-'''
 
 extract_task_technique_prompt = '''Please read the input text and follow these instructions:
 1. Extract the task name, description, challenges and latent techniques of solution from the input text into the first code block.
@@ -41,13 +36,6 @@ Output examples are as follows:
 ```
 '''
 
-def extract_from_code_block(text):
-    matches = re.findall(r'```(.*?)```', text, re.DOTALL)
-    if matches:
-        return [match.strip() for match in matches]
-    else:
-        print("No code blocks found")
-        return []
     
 def concatenate_values(structure):
     result = []
@@ -103,21 +91,6 @@ def read_structure_data(json_path):
         new_json_data.pop("related work")
     return new_json_data
 
-def reformat_json(text):
-    global reformat_json_prompt, client
-    completion = client.chat.completions.create(
-            model="qwen-plus",
-            messages=[
-                {'role': 'system', 'content': reformat_json_prompt},
-                {'role': 'user', 'content': f'```input json\n{text}```'}
-            ],
-            stream=False,
-            temperature=0.0
-        )
-    
-    result = completion.choices[0].message.content
-    new_result = extract_from_code_block(result)[0].strip("json").strip("<").strip(">")
-    return json.loads(new_result)
 
 def extract_task_technique(input_text):
     global extract_task_technique_prompt, client
@@ -133,23 +106,11 @@ def extract_task_technique(input_text):
     result = completion.choices[0].message.content
     result_json_list = extract_from_code_block(result)
     if len(result_json_list) > 0:
-        task_json_str = result_json_list[0].strip("json").strip("<").strip(">")
-        technique_json_str = result_json_list[1].strip("json").strip("<").strip(">")
-        try:
-            task_json = json.loads(task_json_str)
-        except Exception as e:
-            print(f"Exception :{e}", task_json_str)
-            with open("./temp/error.txt", 'w', encoding='utf-8') as f:
-                f.write(task_json_str)
-            task_json = reformat_json(task_json_str)
+        task_json_str = result_json_list[0]
+        technique_json_str = result_json_list[1]
 
-        try:
-            technique_json = json.loads(technique_json_str)
-        except Exception as e:
-            print(f"Exception :{e}", technique_json_str)
-            with open("./temp/error.txt", 'w', encoding='utf-8') as f:
-                f.write(technique_json_str)
-            technique_json = reformat_json(technique_json_str)
+        task_json = extract_json_from_str(task_json_str)
+        technique_json = extract_json_from_str(technique_json_str)
         return task_json, technique_json
     return {}, {}
 
