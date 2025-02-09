@@ -4,14 +4,10 @@ from openai import OpenAI
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import re
 import argparse
-
-client = OpenAI(
-    api_key= os.environ['BAILIAN_API_KEY'], 
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"
-    )
+from util import client, extract_json_from_str
 
 reshape_prompt = '''Please modify the structure of each dictionary in the provided list according to the following requirements:
-1. Ensure that the top-level nodes only include the following:
+1. Ensure that the top-level nodes only include the following by renaming them:
     - Title
     - Abstract
     - Introduction
@@ -22,9 +18,9 @@ reshape_prompt = '''Please modify the structure of each dictionary in the provid
     - Limitations
     - References
     - Appendix
-    - checlist
-    - image
-    - table
+    - Checlist
+    - Image
+    - Table
 2. Move any other content into the appropriate top-level node as a sub-node.
 3. Output the modified structure in a code block for clarity, which is in the format of "```json\n{output}```".
 '''
@@ -36,21 +32,6 @@ The output should be presented within a code block in the following format: "jso
 os.makedirs("./structures", exist_ok=True)
 
 
-def reformat_json(text):
-    global reformat_json_prompt
-    completion = client.chat.completions.create(
-            model="qwen-plus",
-            messages=[
-                {'role': 'system', 'content': reformat_json_prompt},
-                {'role': 'user', 'content': f'```input json\n{text}```'}
-            ],
-            stream=False,
-            temperature=0.0
-        )
-    
-    result = completion.choices[0].message.content
-    new_result = extract_from_code_block(result)[0].strip("json").strip("<").strip(">")
-    return json.loads(new_result)
 
 def check_json_structures(json_dir):
     structures = []
@@ -65,13 +46,6 @@ def check_json_structures(json_dir):
 
     review_structures(structures)
 
-def extract_from_code_block(text):
-    matches = re.findall(r'```(.*?)```', text, re.DOTALL)
-    if matches:
-        return [match.strip() for match in matches]
-    else:
-        print("No code blocks found")
-        return []
 
 def process_item(client, prompt, item, idx):
     completion = client.chat.completions.create(
@@ -85,16 +59,8 @@ def process_item(client, prompt, item, idx):
     )
 
     result = completion.choices[0].message.content
-
-    json_str = extract_from_code_block(result)[0][len("json\n"):]
-
-    try:
-        return json.loads(json_str), idx
-    except json.JSONDecodeError as e:
-        print(f"decode error: {e}")
-        with open("./temp/error.txt", 'w', encoding="utf-8") as f:
-            f.write(json_str)
-        return reformat_json(json_str)
+    result_json = extract_json_from_str(result)
+    return result_json, idx
 
 
 def review_structures(json_data):

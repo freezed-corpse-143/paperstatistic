@@ -2,31 +2,32 @@ import os
 import re
 import json
 from concurrent.futures import ThreadPoolExecutor
-from openai import OpenAI
+from collections import defaultdict
 import argparse
-client = OpenAI(api_key= os.environ['BAILIAN_API_KEY'] , base_url="https://dashscope.aliyuncs.com/compatible-mode/v1")
+from util import client, extract_from_code_block, extract_json_from_str
 
 os.makedirs("./logical_flow", exist_ok=True)
 
-logical_flow_prompt = '''Please read the input text and past writing logic provided in the code block below, and follow these instructions:
-1. Determine if the core narrative structure of the input text is already covered in the previous writing frameworks.
-2. If not present, create a new writing framework for the input text.
-3. Present the new writing framework within a code block using format "```string\n<output>```".
-4. Ensure the framework focuses exclusively on compositional patterns, ignoring specific model names, approach names, method names, datasets, numerical results, and technical jargon.
-5. Condense the writing framework into a single cohesive paragraph.
+logical_flow_prompt = '''Please read the input text, and follow these instructions:
+1. Create a new writing framework for the input text.
+2. Present the new writing framework point by point within a code block using format "```string\n<output>```", where "<output>" is a placeholder.
+3. Ensure the framework focuses exclusively on compositional patterns, ignoring specific model names, approach names, method names, datasets, numerical results, and technical jargon.
+4. Condense the writing framework into a single cohesive paragraph.
+5. An example is as follows:
 
-```Previous Writing Frameworks
-{previous_writing_frameworks}
+```string
+1. Fistly, the introduction highlights ... . 
+2. Then, the focus shifts to ... .  
+3. Then, ... .  
+...
+x. The conclusion emphasizes xxx .
 ```
 '''
 
-def extract_from_code_block(text):
-    matches = re.findall(r'```(.*?)```', text, re.DOTALL)
-    if matches:
-        return [match.strip() for match in matches]
-    else:
-        print("No code blocks found")
-        return []
+fusion_prompt = '''Please read the input json, and follow these instructions:
+1. Remove duplicates in input json and refine the input json for more abstract write frameworks with fewer elements.
+2. Answer should be in the format of "```json<output>```", where "<output>" is the placeholder of a list.
+'''
 
 def concatenate_values(structure):
     result = []
@@ -82,58 +83,39 @@ def read_structure_data(json_path):
         new_json_data.pop("related work")
     return new_json_data
 
-def number_hints_list(hints):
-    if len(hints) == 0:
-        return ""
-    else:
-        result = ""
-        for idx, h in enumerate(hints):
-            result += f"{idx} :{h}\n"
-        result = result.strip("\n")
-        return result
-def generate_logical_flow(text_list, client, prompt, previous_logical_flows_list):
-    
-    for text in text_list:
-        previous_logical_flows = number_hints_list(previous_logical_flows_list)
-
-        completion = client.chat.completions.create(
+def process_section(text):
+    global client, logical_flow_prompt
+    completion = client.chat.completions.create(
             model="qwen-plus",
             messages=[
-                {'role': 'system', 'content': prompt.format(
-                    previous_writing_frameworks=previous_logical_flows
-                )},
+                {'role': 'system', 'content': logical_flow_prompt},
                 {'role': 'user', 'content': f'```input text\n{text}```'}
             ],
             stream=False,
             temperature=0.0
         )
-        result = completion.choices[0].message.content
+    result = completion.choices[0].message.content
+    result_str_list = extract_from_code_block(result)
+    result_str = result_str_list[0].strip("string\n").strip("<").strip(">")
+    return result_str
 
-        new_logical_flow = extract_from_code_block(result)
-        if len(new_logical_flow) != 0:
-            new_logical_flow = new_logical_flow[0][len("string\n"):].strip("<").strip(">")
-        previous_logical_flows_list.append(new_logical_flow)
-    return previous_logical_flows_list
-
-
-def process_section(sn, json_data_list, client, logical_flow_prompt):
-    sn_aggregation = []
-    for json_data in json_data_list:
-        if sn in json_data.keys():
-            sn_aggregation.append(json_data[sn])
-    if os.path.exists(f"./logical_flow/{sn}.json"):
-        with open(f"./logical_flow/{sn}.json", encoding='utf-8') as f:
-            previous_logical_flows_list = json.load(f)
-    else:
-        previous_logical_flows_list = []
-
-    logical_flow_list = generate_logical_flow(sn_aggregation, client, logical_flow_prompt, previous_logical_flows_list)
-    with open(f"./logical_flow/{sn}.json", 'w', encoding='utf-8') as f:
-        json.dump(logical_flow_list, f, indent=4)
-
+def fusion_logical_flow(text_list):
+    global client, fusion_prompt
+    completion = client.chat.completions.create(
+            model="qwen-plus",
+            messages=[
+                {'role': 'system', 'content': fusion_prompt},
+                {'role': 'user', 'content': f'```json\n{json.dumps(text_list)}```'}
+            ],
+            stream=False,
+            temperature=0.0
+        )
+    result = completion.choices[0].message.content
+    result_str_list = extract_from_code_block(result)
+    result_json = extract_json_from_str(result_str_list[0])
+    return result_json
 
 def batch_generate_logical_flow(json_dir):
-    global client, logical_flow_prompt
     json_data_list = []
     for file_name in os.listdir(json_dir):
         file_path = os.path.join(json_dir, file_name)
@@ -149,13 +131,35 @@ def batch_generate_logical_flow(json_dir):
         "appendix"
     ]
 
+    input_data  = []
+    for section_name in section_name_list:
+        for json_data in json_data_list:
+            if section_name in json_data.keys():
+                input_data.append((section_name, json_data[section_name]))
+
+    logical_flow_result = defaultdict(list)
     with ThreadPoolExecutor(max_workers=8) as executor:
-        futures = [
-            executor.submit(process_section, sn, json_data_list, client, logical_flow_prompt)
-            for sn in section_name_list
-        ]
-        for future in futures:
-            future.result()
+        futures_key = {
+            executor.submit(process_section, item[1]):item[0]
+            for item in input_data
+        }
+        for future in futures_key:
+            sn = futures_key[future]
+            logical_flow_result[sn].append(future.result())
+    
+    output_flow_result = defaultdict(list)
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        futures_key = {
+            executor.submit(fusion_logical_flow, logical_flow_result[sn]):sn
+            for sn in logical_flow_result
+        }
+        for future in futures_key:
+            sn = futures_key[future]
+            output_flow_result[sn].extend(future.result())
+
+    for sn in output_flow_result:
+        with open(f"./logical_flow/{sn}.json", 'w', encoding='utf-8') as f:
+            json.dump(output_flow_result[sn], f, indent=4)
 
 def main():
     parser = argparse.ArgumentParser(description="Generate logical flow from JSON files in a directory.")
