@@ -101,7 +101,7 @@ def extract_task_technique(input_text):
             {'role': 'user', 'content': f'input text\n{input_text}'}
         ],
         stream=False,
-        temperature=0.0
+        temperature=0.01
     )
     result = completion.choices[0].message.content
     result_json_list = extract_from_code_block(result)

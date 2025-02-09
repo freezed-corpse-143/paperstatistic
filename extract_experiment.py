@@ -77,7 +77,7 @@ def extract_experiment_info(input_text):
             {'role': 'user', 'content': f'input text\n{input_text}'}
         ],
         stream=False,
-        temperature=0.0
+        temperature=0.01
     )
     result = completion.choices[0].message.content
     result_str_list = extract_from_code_block(result)

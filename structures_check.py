@@ -49,7 +49,7 @@ def process_item(client, prompt, item, idx):
             {'role': 'user', 'content': f'```{json.dumps(item)}```'}
         ],
         stream=False,
-        temperature=0.0
+        temperature=0.01
     )
 
     result = completion.choices[0].message.content

@@ -91,7 +91,7 @@ def process_section(text):
                 {'role': 'user', 'content': f'```input text\n{text}```'}
             ],
             stream=False,
-            temperature=0.0
+            temperature=0.01
         )
     result = completion.choices[0].message.content
     result_str_list = extract_from_code_block(result)
@@ -107,7 +107,7 @@ def fusion_logical_flow(text_list):
                 {'role': 'user', 'content': f'```json\n{json.dumps(text_list)}```'}
             ],
             stream=False,
-            temperature=0.0
+            temperature=0.01
         )
     result = completion.choices[0].message.content
     result_str_list = extract_from_code_block(result)
